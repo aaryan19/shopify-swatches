@@ -90,6 +90,8 @@ export default function FormPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [conditionCount, setConditionCount] = useState(0);
   const [deliveryName, setDeliveryName] = useState("");
+  const [availableDays, setAvailableDays] = useState([]);
+  const [availableFlower, setAvailableFlower] = useState([]);
 
   useEffect(() => {
     if (actionData?.success) {
@@ -126,12 +128,33 @@ export default function FormPage() {
                       <TextField name="zipcode" label="Zip Codes (comma separated)" />
                       <ChoiceList
                         allowMultiple
-                        name="availableDays"
                         title="Available Days"
-                        choices={daysOfWeek.map((day) => ({
-                          label: day,
-                          value: day,
-                        }))}
+                        choices={[
+                          { label: "Sunday", value: "Sunday" },
+                          { label: "Monday", value: "Monday" },
+                          { label: "Tuesday", value: "Tuesday" },
+                          { label: "Wednesday", value: "Wednesday" },
+                          { label: "Thursday", value: "Thursday" },
+                          { label: "Friday", value: "Friday" },
+                          { label: "Saturday", value: "Saturday" },
+                        ]}
+                        selected={availableDays || []}
+                        onChange={setAvailableDays}
+                      />
+                      <ChoiceList
+                        allowMultiple
+                        title="Flower Types"
+                        choices={[
+                          { label: "Sunday", value: "Sunday" },
+                          { label: "Monday", value: "Monday" },
+                          { label: "Tuesday", value: "Tuesday" },
+                          { label: "Wednesday", value: "Wednesday" },
+                          { label: "Thursday", value: "Thursday" },
+                          { label: "Friday", value: "Friday" },
+                          { label: "Saturday", value: "Saturday" },
+                        ]}
+                        selected={availableFlower || []}
+                        onChange={setAvailableFlower}
                       />
                       <ChoiceList
                         allowMultiple
