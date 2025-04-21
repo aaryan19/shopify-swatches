@@ -1,0 +1,81 @@
+<div class="variant-swatches-with-images">
+  {% for option in product.options_with_values %}
+    <div class="variant-option-group">
+      <p class="option-label">{{ option.name }}</p>
+      <div class="option-swatch-row">
+        {% for value in option.values %}
+          {% assign matched_variant = null %}
+          {% for variant in product.variants %}
+            {% assign matched = false %}
+            {% if option.name == product.options[0] and variant.option1 == value %}
+              {% assign matched = true %}
+            {% elsif option.name == product.options[1] and variant.option2 == value %}
+              {% assign matched = true %}
+            {% elsif option.name == product.options[2] and variant.option3 == value %}
+              {% assign matched = true %}
+            {% endif %}
+            {% if matched %}
+              {% assign matched_variant = variant %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% assign swatch_image = matched_variant.metafields.custom.swatch_image %}
+
+          <label class="swatch-label">
+            <input type="radio"
+              name="option-{{ option.name | handle }}"
+              value="{{ value }}"
+              data-option-position="{{ forloop.index0 }}"
+              class="variant-swatch-radio"
+              {% if forloop.first %}checked{% endif %}
+            >
+            {% if swatch_image %}
+              <img src="{{ swatch_image | image_url: width: 100 }}" alt="{{ value }}" class="swatch-image">
+            {% else %}
+              <span class="swatch-fallback">{{ value }}</span>
+            {% endif %}
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+
+<style>
+  .variant-option-group {
+    margin-bottom: 1.5rem;
+  }
+  .option-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .option-swatch-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .swatch-label {
+    cursor: pointer;
+  }
+  .swatch-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: border-color 0.3s;
+  }
+  .variant-swatch-radio:checked + .swatch-image {
+    border-color: #000;
+  }
+
+</style>
+{% schema %}
+  {
+    "name": "Star Rating",
+    "target": "section"
+  }
+  {% endschema %}
