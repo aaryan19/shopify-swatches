@@ -3,7 +3,7 @@
 client_id = "75d6f48b7607e5b8800206b6101c674b"
 name = "ui-dashboard"
 handle = "ui-dashboard-2"
-application_url = "https://publishing-formatting-latina-dude.trycloudflare.com"
+application_url = "https://sterling-famous-inspector-german.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://publishing-formatting-latina-dude.trycloudflare.com/auth/callback",
-  "https://publishing-formatting-latina-dude.trycloudflare.com/auth/shopify/callback",
-  "https://publishing-formatting-latina-dude.trycloudflare.com/api/auth/callback"
+  "https://sterling-famous-inspector-german.trycloudflare.com/auth/callback",
+  "https://sterling-famous-inspector-german.trycloudflare.com/auth/shopify/callback",
+  "https://sterling-famous-inspector-german.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

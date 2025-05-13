@@ -1,0 +1,49 @@
+{% assign collection = collections['automated-collection'] %}
+
+{% for product in collection.products %}
+  <!-- Access product details here -->
+  <div class="product">
+    <h3>{{ product.title }}</h3>
+    <p>Price: {{ product.price | money }}</p>
+    <p>Description: {{ product.description | truncate: 100 }}</p>
+    
+    <!-- Access product images -->
+    {% if product.featured_image %}
+      <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+    {% endif %}
+    
+    <!-- Access product variants -->
+    <ul>
+      {% for variant in product.variants %}
+        <li>
+          {{ variant.title }} - {{ variant.price | money }}
+          {% if variant.available %}In stock{% else %}Sold out{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    
+    <!-- Access product tags -->
+    <p>Tags: {{ product.tags | join: ', ' }}</p>
+    
+    <!-- Access product type -->
+    <p>Type: {{ product.type }}</p>
+    
+    <!-- Access product vendor -->
+    <p>Vendor: {{ product.vendor }}</p>
+  </div>
+{% endfor %}
+
+
+{% schema %}
+{
+  "name": "Product Title Block",
+  "target": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select a product"
+    }
+  ]
+}
+{% endschema %}

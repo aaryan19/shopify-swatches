@@ -1,0 +1,52 @@
+{% assign collection = collections['automated-collection'] %}
+
+{% if collection %}
+  <p>Collection found: {{ collection.title }}</p>
+  <p>Number of products: {{ collection.products.size }}</p>
+{% else %}
+  <p style="color:red">Collection not found</p>
+{% endif %}
+<div id="react-root"></div>
+
+{% if collection and collection.products %}
+  <script id="product-data" type="application/json">
+    [
+    {% for product in collection.products %}
+      {
+        "id": {{ product.id | json }},
+        "title": {{ product.title | json }},
+        "price": {{ product.price | json }},
+        "body_html": {{ product.description | json }},
+        "tags": {{ product.tags | json }},
+        "product_type": {{ product.product_type | json }},
+        "vendor": {{ product.vendor | json }},
+        "image": {
+          "src": {{ product.featured_image | json }}
+        },
+        "variants": [
+          {% for variant in product.variants %}
+            {
+              "id": {{ variant.id | json }},
+              "title": {{ variant.title | json }},
+              "price": {{ variant.price | json }},
+              "available": {{ variant.available | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    ]
+  </script>
+{% else %}
+  <p style="color:red">No products found in collection or collection not loaded.</p>
+{% endif %}
+
+{{ 'react-app.js' | asset_url | script_tag }}
+
+{% schema %}
+{
+  "name": "React Product Block",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}
