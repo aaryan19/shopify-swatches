@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from '../context/LocationContext';
+import React, { useState, useEffect, useContext } from 'react';
+import { LocationContext } from '../context/LocationContext';
 
 export default function LocationPopup() {
-  const { location, setLocation } = useLocation();
+  const { location, setLocation } = useContext(LocationContext); // ✅ Correct usage
   const [input, setInput] = useState('');
-  const [showPopup, setShowPopup] = useState(!location);
+  const [showPopup, setShowPopup] = useState(!location); // Show popup if no location
 
   useEffect(() => {
     if (showPopup) {
@@ -18,7 +18,6 @@ export default function LocationPopup() {
     e.preventDefault();
     if (input.trim()) {
       setLocation(input.trim());
-      console.log('Location set to:', input.trim());
       setShowPopup(false);
     }
   };

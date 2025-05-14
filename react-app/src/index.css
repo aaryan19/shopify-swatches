@@ -194,3 +194,38 @@ body {
 .popup-content button:hover {
   background-color: #333;
 }
+
+.location-banner {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.location-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.location-input {
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.save-btn, .change-btn {
+  padding: 5px 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-btn:hover, .change-btn:hover {
+  background-color: #222;
+}

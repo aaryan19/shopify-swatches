@@ -14,7 +14,8 @@ export default defineConfig({
     rollupOptions: {
       input: './src/main.jsx',
       output: {
-        entryFileNames: 'react-app.js'
+        entryFileNames: 'react-app.js',
+        assetFileNames: 'index.css',
       },
     },
   },

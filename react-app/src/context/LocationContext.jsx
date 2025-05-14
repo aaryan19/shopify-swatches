@@ -1,28 +1,13 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
-const LocationContext = createContext();
+export const LocationContext = createContext();
 
-export function LocationProvider({ children }) {
-  const [location, setLocation] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('userLocation') || '';
-    }
-    return '';
-  });
-
-  useEffect(() => {
-    if (location) {
-      localStorage.setItem('userLocation', location);
-    }
-  }, [location]);
+export const LocationProvider = ({ children }) => {
+  const [location, setLocation] = useState('');
 
   return (
     <LocationContext.Provider value={{ location, setLocation }}>
       {children}
     </LocationContext.Provider>
   );
-}
-
-export function useLocation() {
-  return useContext(LocationContext);
-}
+};
