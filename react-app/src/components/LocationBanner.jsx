@@ -1,19 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { LocationContext } from '../context/LocationContext';
 
 const LocationBanner = () => {
   const { location, setLocation } = useContext(LocationContext);
   const [editing, setEditing] = useState(false);
-  const [inputValue, setInputValue] = useState(location);
+  const [inputValue, setInputValue] = useState('');
+
+  // Whenever location changes externally, update inputValue so the edit input is synced
+  useEffect(() => {
+    setInputValue(location);
+  }, [location]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLocation(inputValue);
-    setEditing(false);
+    if (inputValue.trim() !== '') {
+      setLocation(inputValue.trim());
+      setEditing(false);
+    }
   };
 
   const handleChangeClick = () => {
-    setInputValue(location);
     setEditing(true);
   };
 
