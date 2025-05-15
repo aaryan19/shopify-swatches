@@ -1,50 +1,57 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { LocationContext } from '../context/LocationContext'; // ✅ Correct import
+import React, { useContext, useEffect } from 'react';
+import { LocationContext } from '../context/LocationContext';
 
-const ProductList = () => {
+const ProductList = ({ products }) => {
   const { location } = useContext(LocationContext);
-  const [allProducts, setAllProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const productDataScript = document.getElementById('product-data');
-    if (productDataScript) {
-      const products = JSON.parse(productDataScript.textContent);
-      setAllProducts(products);
-    }
-  }, []);
+    console.log('✅ ProductList received products:', products);
+    console.log('📍 Current location filter:', location);
+  }, [products, location]);
 
-  useEffect(() => {
-    if (!location) {
-      setFilteredProducts([]);
-      return;
-    }
-
-    const normalizedLocation = location.trim().toLowerCase();
-
-    const filtered = allProducts.filter(product =>
-      product.tags.some(tag => tag.toLowerCase().includes(normalizedLocation))
-    );
-
-    setFilteredProducts(filtered);
-  }, [location, allProducts]);
-
-  if (!location) {
-    return <p style={{ color: 'gray' }}>Please enter your location to view products.</p>;
+  if (!Array.isArray(products)) {
+    return <p style={{ color: 'red' }}>Product list is not valid</p>;
   }
 
+  const filteredProducts = !location
+    ? products
+    : products.filter(product =>
+        Array.isArray(product.tags) &&
+        product.tags.some(tag =>
+          tag.toLowerCase().includes(location.toLowerCase())
+        )
+      );
+
   if (filteredProducts.length === 0) {
-    return <p style={{ color: 'red' }}>No products available for location: {location}</p>;
+    return <p>No matching products found for location "{location}".</p>;
   }
 
   return (
-    <div className="product-list">
-      {filteredProducts.map(product => (
-        <div key={product.id} className="product-card">
-          <img src={product.image.src} alt={product.title} />
+    <div style={{ marginTop: '2em' }}>
+      {filteredProducts.map((product) => (
+        <div
+          key={product.id}
+          style={{
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            padding: '1em',
+            marginBottom: '1em',
+          }}
+        >
           <h3>{product.title}</h3>
-          <p>Price: ${product.price / 100}</p>
-          <p dangerouslySetInnerHTML={{ __html: product.body_html }} />
+          <p><strong>Price:</strong> ${(product.price / 100).toFixed(2)}</p>
+          {product.tags?.length > 0 && (
+            <p><strong>Tags:</strong> {product.tags.join(', ')}</p>
+          )}
+          {product.image?.src ? (
+            <img
+              src={product.image.src}
+              alt={product.title}
+              style={{ maxWidth: '200px', height: 'auto', marginTop: '1em' }}
+            />
+          ) : (
+            <p style={{ color: 'gray' }}>No image available</p>
+          )}
         </div>
       ))}
     </div>

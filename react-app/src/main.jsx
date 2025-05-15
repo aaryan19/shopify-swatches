@@ -1,31 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { LocationProvider } from './context/LocationProvider'; // ✅ Corrected import
 
-const mountReactApp = (element) => {
-  const view = element.dataset.view || "product";
-  const pageType = element.dataset.pageType || null;
+document.addEventListener('DOMContentLoaded', () => {
+  const rootElements = [
+    document.getElementById('react-root'),
+    document.getElementById('location-banner-root')
+  ].filter(Boolean); // Remove nulls
 
-  let productData = null;
-  const productScript = document.getElementById('product-data');
-  if (productScript) {
-    try {
-      const parsed = JSON.parse(productScript.textContent);
-      productData = Array.isArray(parsed) ? parsed : [parsed];
-      console.log(`✅ Loaded product data for ${view}`, productData);
-    } catch (e) {
-      console.error(`❌ Failed to parse product JSON for ${view}`, e);
-    }
+  rootElements.forEach((rootElement) => {
+    const view = rootElement.dataset.view || 'default';
+    const pageType = rootElement.dataset.pageType || null;
+
+    console.log('🔧 Mounting React app with view:', view, 'on', rootElement.id);
+
+    ReactDOM.createRoot(rootElement).render(
+      <App view={view} pageType={pageType} />
+    );
+  });
+
+  if (rootElements.length === 0) {
+    console.warn('⚠️ No valid root elements found to mount the React app.');
   }
-
-  ReactDOM.createRoot(element).render(
-    <LocationProvider> {/* ✅ Wrap app in provider */}
-      <App view={view} pageType={pageType} product={productData} />
-    </LocationProvider>
-  );
-};
-
-document.querySelectorAll('[data-view]').forEach((el) => {
-  mountReactApp(el);
 });

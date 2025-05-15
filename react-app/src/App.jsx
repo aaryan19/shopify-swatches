@@ -1,21 +1,39 @@
-import React, { useContext } from 'react';
-import { LocationContext } from './context/LocationContext';
+import React from 'react';
+import { LocationProvider } from './context/LocationProvider';
 import LocationPopup from './components/LocationPopup';
 import LocationBanner from './components/LocationBanner';
+import ProductList from './components/ProductList';
 
-function App({ view, product, pageType }) {
-  const { location } = useContext(LocationContext);
+function App({ view }) {
+  // Read product data from <script id="product-data">
+  let productData = [];
+  const script = document.getElementById('product-data');
+  if (script) {
+    try {
+      productData = JSON.parse(script.textContent);
+      console.log('✅ Parsed product data:', productData);
+    } catch (error) {
+      console.error('❌ Failed to parse product data:', error);
+    }
+  } else {
+    console.warn('⚠️ No script tag with id="product-data" found.');
+  }
 
-  console.log("📦 view:", view);
-  console.log("🧭 pageType:", pageType);
-  console.log("📍 Location from context:", location);
+  console.log('📍 View:', view);
 
-  // Always render popup and banner so they can share context
   return (
-    <div>
-      <LocationPopup />
-      <LocationBanner />
-    </div>
+    <LocationProvider>
+      {view !== 'product' && (
+        <>
+          <LocationPopup />
+          <LocationBanner />
+        </>
+      )}
+
+      {view === 'product' && (
+        <ProductList products={productData} />
+      )}
+    </LocationProvider>
   );
 }
 
