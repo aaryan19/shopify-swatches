@@ -23,18 +23,13 @@ function App({ view }) {
 
   return (
     <LocationProvider>
-      {view !== 'product' && (
-        <>
-          <LocationPopup />
-          <LocationBanner />
-        </>
-      )}
+      <LocationPopup />
+      <LocationBanner/>
 
-      {view === 'product' && (
-        <ProductList products={productData} />
-      )}
+      {view === 'product' && <ProductList products={productData} />}
     </LocationProvider>
   );
+
 }
 
 export default App;

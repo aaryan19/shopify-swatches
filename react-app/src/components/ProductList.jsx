@@ -2,11 +2,47 @@ import React, { useContext, useEffect } from 'react';
 import { LocationContext } from '../context/LocationContext';
 
 const ProductList = ({ products }) => {
-  const { location } = useContext(LocationContext);
+  const { location, setLocation } = useContext(LocationContext);
 
+  // Initialize location from localStorage
   useEffect(() => {
-    console.log('✅ ProductList received products:', products);
-    console.log('📍 Current location filter:', location);
+    const savedLocation = localStorage.getItem('location');
+    if (savedLocation && savedLocation !== location) {
+      setLocation(savedLocation);
+    }
+  }, []);
+
+  // Listen for both storage event and custom locationChanged event
+  useEffect(() => {
+    const handleStorage = (event) => {
+      if (event.key === 'location') {
+        const newLocation = event.newValue;
+        if (newLocation !== location) {
+          setLocation(newLocation);
+        }
+      }
+    };
+
+    const handleCustomChange = (event) => {
+      const newLocation = event.detail;
+      if (newLocation !== location) {
+        setLocation(newLocation);
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('locationChanged', handleCustomChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('locationChanged', handleCustomChange);
+    };
+  }, [location]);
+
+  // DEBUG
+  useEffect(() => {
+    console.log('📦 Products:', products);
+    console.log('📍 Location:', location);
   }, [products, location]);
 
   if (!Array.isArray(products)) {
@@ -29,15 +65,12 @@ const ProductList = ({ products }) => {
   return (
     <div style={{ marginTop: '2em' }}>
       {filteredProducts.map((product) => (
-        <div
-          key={product.id}
-          style={{
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            padding: '1em',
-            marginBottom: '1em',
-          }}
-        >
+        <div key={product.id} style={{
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          padding: '1em',
+          marginBottom: '1em',
+        }}>
           <h3>{product.title}</h3>
           <p><strong>Price:</strong> ${(product.price / 100).toFixed(2)}</p>
           {product.tags?.length > 0 && (

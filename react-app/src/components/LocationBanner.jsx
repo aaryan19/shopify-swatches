@@ -6,7 +6,6 @@ const LocationBanner = () => {
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  // Whenever location changes externally, update inputValue so the edit input is synced
   useEffect(() => {
     setInputValue(location);
   }, [location]);
@@ -14,10 +13,14 @@ const LocationBanner = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim() !== '') {
-      setLocation(inputValue.trim());
+      const newLocation = inputValue.trim();
+      setLocation(newLocation);
+      localStorage.setItem('location', newLocation); // Broadcast to other tabs
+      window.dispatchEvent(new CustomEvent('locationChanged', { detail: newLocation })); // Broadcast to same tab
       setEditing(false);
     }
   };
+
 
   const handleChangeClick = () => {
     setEditing(true);
