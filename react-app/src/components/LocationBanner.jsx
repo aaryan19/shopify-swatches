@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { LocationContext } from '../context/LocationContext';
 
-const LocationBanner = () => {
+const LocationBanner = ({ hidden }) => {
   const { location, setLocation } = useContext(LocationContext);
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -10,6 +10,9 @@ const LocationBanner = () => {
     setInputValue(location);
   }, [location]);
 
+  if (hidden) {
+    return <div className="location-banner" style={{ display: 'none' }} />;
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim() !== '') {

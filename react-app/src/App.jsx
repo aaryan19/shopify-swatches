@@ -24,8 +24,7 @@ function App({ view }) {
   return (
     <LocationProvider>
       <LocationPopup />
-      <LocationBanner/>
-
+      <LocationBanner hidden={view === 'product'}/>
       {view === 'product' && <ProductList products={productData} />}
     </LocationProvider>
   );
